@@ -1,0 +1,12 @@
+# Keep environment variables out of version control
+
+#envs
+.env
+.env.test
+
+#
+build
+node_modules
+
+#JEST
+covarege
