@@ -96,7 +96,7 @@ model Pet {
   name       String
   type       PetType
   age        Int
-  size       Size
+  weight     Float
   vaccinated Boolean
   about      String
 
@@ -144,12 +144,6 @@ model Picture {
 enum PetType {
   dog
   cat
-}
-
-enum Size {
-  small
-  medium
-  large
 }
 
 // model ChatRoom {
