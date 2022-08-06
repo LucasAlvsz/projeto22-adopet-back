@@ -21,4 +21,16 @@ const notFoundError = (message: string) => {
 	}
 }
 
-export { unauthorizedError, conflictError, notFoundError }
+const unprocessableEntityError = (message: string) => {
+	return {
+		status: 422,
+		message,
+	}
+}
+
+export {
+	unauthorizedError,
+	conflictError,
+	notFoundError,
+	unprocessableEntityError,
+}

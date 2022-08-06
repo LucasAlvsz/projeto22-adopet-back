@@ -16,10 +16,10 @@ model User {
   email             String             @unique
   password          String
   createdAt         DateTime           @default(now())
-  userPets          UserPets[]
   // messages_from_user Message[]  @relation("from_user_id")
   // messages_to_user   Message[]  @relation("to_user_id")
   NotInterestedPets NotInterestedPet[]
+  Pet               Pet[]
 
   @@map("users")
 }
@@ -70,17 +70,6 @@ model District {
   @@map("districts")
 }
 
-model UserPets {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  petId     Int
-  pet       Pet      @relation(fields: [petId], references: [id])
-  createdAt DateTime @default(now())
-
-  @@map("user_pets")
-}
-
 model NotInterestedPet {
   id     Int  @id @default(autoincrement())
   userId Int
@@ -100,13 +89,15 @@ model Pet {
   vaccinated Boolean
   about      String
 
+  ownerId     Int
+  ownerUserId User @relation(fields: [ownerId], references: [id])
+
   breedId Int
   breed   Breed @relation(fields: [breedId], references: [id])
 
   createdAt         DateTime           @default(now())
-  userPets          UserPets[]
   petPictures       petPictures[]
-  NotInterestedPets NotInterestedPet[]
+  notInterestedPets NotInterestedPet[]
 
   @@map("pets")
 }
