@@ -4,7 +4,7 @@ import Joi from "joi"
 const bodySchema = Joi.object<SignUpData>({
 	name: Joi.string().required(),
 	email: Joi.string().email().required(),
-	password: Joi.string().required(),
+	password: Joi.string().min(8).required(),
 })
 	.required()
 	.options({ allowUnknown: false })

@@ -9,6 +9,12 @@ const getPets = async (req: Request, res: Response) => {
 	res.send(pets)
 }
 
+const getPetProfileById = async (req: Request, res: Response) => {
+	const petId = Number(req.params.id)
+	const pet = await petService.getProfileById(petId)
+	res.send(pet)
+}
+
 const addNotInterestedPet = async (req: Request, res: Response) => {
 	const petId = Number(req.params.id)
 	const { id: userId } = res.locals.userData
@@ -16,4 +22,4 @@ const addNotInterestedPet = async (req: Request, res: Response) => {
 	res.sendStatus(200)
 }
 
-export { getPets, addNotInterestedPet }
+export { getPets, addNotInterestedPet, getPetProfileById }

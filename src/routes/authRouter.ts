@@ -6,7 +6,7 @@ import validateSchema from "@/middlewares/validateSchemaMiddleware"
 
 const authRouter = Router()
 
-authRouter.get("/sign-up", validateSchema(signUpchema), signUp)
-authRouter.get("/sign-in", validateSchema(signInSchema), signIn)
+authRouter.post("/sign-up", validateSchema(signUpchema), signUp)
+authRouter.post("/sign-in", validateSchema(signInSchema), signIn)
 
 export default authRouter

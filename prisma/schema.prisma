@@ -15,6 +15,7 @@ model User {
   name              String
   email             String             @unique
   password          String
+  picUrl            String?
   createdAt         DateTime           @default(now())
   // messages_from_user Message[]  @relation("from_user_id")
   // messages_to_user   Message[]  @relation("to_user_id")
@@ -26,12 +27,15 @@ model User {
 
 model Adress {
   id         Int      @id @default(autoincrement())
+  CEP        String
   stateId    Int
   state      State    @relation(fields: [stateId], references: [id])
   cityId     Int
   city       City     @relation(fields: [cityId], references: [id])
   districtId Int
   district   District @relation(fields: [districtId], references: [id])
+  Pet        Pet?     @relation(fields: [petId], references: [id])
+  petId      Int?
 }
 
 model State {
@@ -86,11 +90,15 @@ model Pet {
   type       PetType
   age        Int
   weight     Float
+  sex        String
   vaccinated Boolean
   about      String
 
-  ownerId     Int
-  ownerUserId User @relation(fields: [ownerId], references: [id])
+  adressId Int
+  adress   Adress[]
+
+  ownerId   Int
+  ownerUser User @relation(fields: [ownerId], references: [id])
 
   breedId Int
   breed   Breed @relation(fields: [breedId], references: [id])

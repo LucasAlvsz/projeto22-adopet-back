@@ -8,13 +8,64 @@ const findAll = async (filter: Filter, userId: number) => {
 				every: { userId: { not: userId } },
 			},
 		},
+		select: {
+			id: true,
+			name: true,
+			age: true,
+			weight: true,
+			vaccinated: true,
+			about: true,
+			breed: { select: { name: true } },
+			ownerUser: { select: { name: true } },
+			petPictures: { select: { picture: { select: { url: true } } } },
+			adress: {
+				select: {
+					city: { select: { name: true } },
+					state: { select: { name: true } },
+					district: { select: { name: true } },
+				},
+			},
+		},
+	})
+}
+
+const getById = (petId: number) => {
+	return prisma.pet.findUnique({
+		where: {
+			id: petId,
+		},
+		select: {
+			id: true,
+			name: true,
+			age: true,
+			sex: true,
+			weight: true,
+			vaccinated: true,
+			about: true,
+			breed: { select: { name: true } },
+			ownerUser: { select: { name: true, picUrl: true } },
+			petPictures: { select: { picture: { select: { url: true } } } },
+			adress: {
+				select: {
+					city: { select: { name: true } },
+					state: { select: { name: true } },
+					district: { select: { name: true } },
+				},
+			},
+		},
 	})
 }
 
 const addNotInterestedPet = async (petId: number, userId: number) =>
 	prisma.notInterestedPet.create({ data: { petId, userId } })
 
+const getNotInterestedPetByUserId = async (petId: number, userId: number) => {
+	return prisma.notInterestedPet.findFirst({ where: { petId, userId } })
+}
+
 export default {
 	findAll,
+	getById,
 	addNotInterestedPet,
+	getNotInterestedPetByUserId,
 }
