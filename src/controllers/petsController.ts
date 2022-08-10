@@ -3,9 +3,9 @@ import { Request, Response } from "express"
 import petService from "@/services/petsService"
 
 const getPets = async (req: Request, res: Response) => {
-	const query = req.query.filter || ""
-	const { id: userId } = res.locals.userData
-	const pets = await petService.getPets(query as string, userId)
+	const filter: any = req.query.filter || false
+	const { id: userId, adressId } = res.locals.userData
+	const pets = await petService.getPets(filter, userId, adressId)
 	res.send(pets)
 }
 

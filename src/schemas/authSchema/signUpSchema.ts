@@ -5,6 +5,9 @@ const bodySchema = Joi.object<SignUpData>({
 	name: Joi.string().required(),
 	email: Joi.string().email().required(),
 	password: Joi.string().min(8).required(),
+	cep: Joi.string()
+		.pattern(/^\d{8}$/)
+		.required(),
 })
 	.required()
 	.options({ allowUnknown: false })

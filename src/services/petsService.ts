@@ -1,11 +1,15 @@
 import { conflictError, notFoundError, unprocessableEntityError } from "@/errors"
 import queryFactory from "@/factories/queryFactory"
+import adressRepository from "@/respositories/adressRepository"
 import petsRepository from "@/respositories/petsRepository"
+import { Filter } from "@/types/petTypes"
 
-const getPets = async (filter: string, userId: number) => {
-	if (filter !== "dog" && filter !== "cat" && filter !== "")
-		throw unprocessableEntityError(`Invalid filter "${filter}"`)
-	return await petsRepository.findAll(filter as Filter, userId)
+const getPets = async (filter: Filter, userId: number, adressId: number) => {
+	if (filter.location) {
+		const { state } = await adressRepository.getById(adressId)
+		filter.location = state.name
+	}
+	return await petsRepository.findAll(filter, userId)
 }
 
 const getProfileById = async (petId: number) => {

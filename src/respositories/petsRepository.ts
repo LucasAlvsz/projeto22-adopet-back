@@ -3,10 +3,14 @@ import prisma from "@/db"
 const findAll = async (filter: Filter, userId: number) => {
 	return prisma.pet.findMany({
 		where: {
-			...(filter && { type: filter }),
+			...(filter.type && { type: filter.type }),
 			notInterestedPets: {
 				every: { userId: { not: userId } },
 			},
+			...(filter.location && {
+				ownerUser: { adress: { city: { state: { name: { equals: filter.location } } } } },
+			}),
+			...(filter.vaccinated && { vaccinated: filter.vaccinated }),
 		},
 		select: {
 			id: true,
@@ -16,15 +20,19 @@ const findAll = async (filter: Filter, userId: number) => {
 			vaccinated: true,
 			about: true,
 			breed: { select: { name: true } },
-			ownerUser: { select: { name: true } },
-			petPictures: { select: { picture: { select: { url: true } } } },
-			adress: {
+			ownerUser: {
 				select: {
-					city: { select: { name: true } },
-					state: { select: { name: true } },
-					district: { select: { name: true } },
+					name: true,
+					adress: {
+						select: {
+							city: { select: { name: true } },
+							state: { select: { name: true } },
+							district: { select: { name: true } },
+						},
+					},
 				},
 			},
+			petPictures: { select: { picture: { select: { url: true } } } },
 		},
 	})
 }
@@ -43,15 +51,21 @@ const getById = (petId: number) => {
 			vaccinated: true,
 			about: true,
 			breed: { select: { name: true } },
-			ownerUser: { select: { name: true, picUrl: true } },
-			petPictures: { select: { picture: { select: { url: true } } } },
-			adress: {
+			ownerUser: {
 				select: {
-					city: { select: { name: true } },
-					state: { select: { name: true } },
-					district: { select: { name: true } },
+					name: true,
+					picUrl: true,
+
+					adress: {
+						select: {
+							city: { select: { name: true } },
+							state: { select: { name: true } },
+							district: { select: { name: true } },
+						},
+					},
 				},
 			},
+			petPictures: { select: { picture: { select: { url: true } } } },
 		},
 	})
 }

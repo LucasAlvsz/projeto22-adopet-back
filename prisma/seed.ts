@@ -10,6 +10,7 @@ const main = async () => {
 			name: "Lucax",
 			email: "lucax@gmail.com",
 			password: encryptWithSalt("lucaxlucax"),
+			adressId: 1,
 		},
 	]
 
@@ -22,12 +23,14 @@ const main = async () => {
 	const city = [
 		{
 			name: "Brasília",
+			stateId: 1,
 		},
 	]
 
 	const districts = [
 		{
 			name: "Santa Maria",
+			cityId: 1,
 		},
 	]
 
@@ -61,7 +64,6 @@ const main = async () => {
 			about: faker.lorem.lines(),
 			breedId: 1,
 			ownerId: 1,
-			adressId: 1,
 		},
 		{
 			name: faker.animal.cat.name,
@@ -72,8 +74,7 @@ const main = async () => {
 			vaccinated: true,
 			about: faker.lorem.lines(),
 			breedId: 2,
-			ownerId: 1,
-			adressId: 1,
+			ownerId: 1
 		},
 	]
 	const notInterestedPets = [
@@ -88,7 +89,16 @@ const main = async () => {
 			url: faker.image.imageUrl(640, 640, "dog"),
 		},
 		{
-			url: faker.image.imageUrl(640, 640, "cat"),
+			url: "https://static.natgeo.pt/files/styles/image_3200/public/75552.ngsversion.1422285553360.webp?w=768",
+		},
+		{
+			url: "https://www.organnact.com.br/wp-content/uploads/2021/09/doencas-mais-comuns-em-gatos-no-inverno.jpg",
+		},
+		{
+			url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWUnHC4LDnWLtbEjINI7oL2u29y50y7vb8jnPdgrEBqbxVHLImCJEj3ks_bxHCQgMipHw&usqp=CAU",
+		},
+		{
+			url: "https://www.petz.com.br/blog/wp-content/uploads/2021/11/enxoval-para-gato-Copia.jpg",
 		},
 	]
 
@@ -101,8 +111,23 @@ const main = async () => {
 			petId: 2,
 			pictureId: 2,
 		},
+		{
+			petId: 2,
+			pictureId: 3,
+		},
+		{
+			petId: 2,
+			pictureId: 4,
+		},
+		{
+			petId: 2,
+			pictureId: 5,
+		},
 	]
-
+	await prisma.state.createMany({ data: states })
+	await prisma.city.createMany({ data: city })
+	await prisma.district.createMany({ data: districts })
+	await prisma.adress.createMany({ data: adresses })
 	await prisma.user.createMany({ data: users })
 	await prisma.breed.createMany({ data: breeds })
 	await prisma.pet.createMany({ data: pets })

@@ -1,6 +1,6 @@
 import { User } from "@prisma/client"
 
-type SignUpData = Omit<User, "id" | "createdAt">
+type SignUpData = { cep: string } & Omit<User, "id" | "createdAt | adressId">
 
 type UserData = Omit<SignUpData, "name">
 
