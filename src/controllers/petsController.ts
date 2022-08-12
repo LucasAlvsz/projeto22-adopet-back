@@ -22,4 +22,18 @@ const addNotInterestedPet = async (req: Request, res: Response) => {
 	res.sendStatus(200)
 }
 
-export { getPets, addNotInterestedPet, getPetProfileById }
+const addInterestedPet = async (req: Request, res: Response) => {
+	const petId = Number(req.params.id)
+	const { id: userId } = res.locals.userData
+	await petService.addInterestedPet(petId, userId)
+	res.sendStatus(200)
+}
+
+const getInterestedPets = async (req: Request, res: Response) => {
+	const petId = Number(req.params.id)
+	const { id: userId } = res.locals.userData
+	const pets = await petService.getInterestedPets(petId, userId)
+	res.send(pets)
+}
+
+export { getPets, getPetProfileById, addNotInterestedPet, addInterestedPet, getInterestedPets }

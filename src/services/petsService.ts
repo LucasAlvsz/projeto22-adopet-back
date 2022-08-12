@@ -23,11 +23,35 @@ const addNotInterestedPet = async (petId: number, userId: number) => {
 	if (!pet) throw notFoundError("pet not found")
 	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(petId, userId)
 	if (notInterestedPet) throw conflictError("pet already marked as not interested")
+	const interestedPet = await petsRepository.getInterestedPetByUserId(petId, userId)
+	if (interestedPet) throw conflictError("pet already marked as interested")
+
 	await petsRepository.addNotInterestedPet(petId, userId)
+}
+
+const addInterestedPet = async (petId: number, userId: number) => {
+	const pet = await queryFactory.getById(petId, "Pet")
+	if (!pet) throw notFoundError("pet not found")
+	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(petId, userId)
+	if (notInterestedPet) throw conflictError("pet already marked as not interested")
+	const interestedPet = await petsRepository.getInterestedPetByUserId(petId, userId)
+	if (interestedPet) throw conflictError("pet already marked as interested")
+
+	await petsRepository.addInterestedPet(petId, userId)
+}
+
+const getInterestedPets = async (petId: number, userId: number) => {
+	const pet = await queryFactory.getById(petId, "Pet")
+	if (!pet) throw notFoundError("pet not found")
+
+	const pets = await petsRepository.getAllInterestedPets(userId)
+	return pets
 }
 
 export default {
 	getPets,
 	getProfileById,
 	addNotInterestedPet,
+	addInterestedPet,
+	getInterestedPets,
 }

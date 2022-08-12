@@ -1,16 +1,21 @@
 import prisma from "@/db"
+import { Filter } from "@/types/petTypes"
 
 const findAll = async (filter: Filter, userId: number) => {
 	return prisma.pet.findMany({
 		where: {
 			...(filter.type && { type: filter.type }),
-			notInterestedPets: {
-				every: { userId: { not: userId } },
-			},
 			...(filter.location && {
 				ownerUser: { adress: { city: { state: { name: { equals: filter.location } } } } },
 			}),
 			...(filter.vaccinated && { vaccinated: filter.vaccinated }),
+
+			notInterestedPets: {
+				every: { userId: { not: userId } },
+			},
+			InterestedPet: {
+				every: { userId: { not: userId } },
+			},
 		},
 		select: {
 			id: true,
@@ -73,13 +78,27 @@ const getById = (petId: number) => {
 const addNotInterestedPet = async (petId: number, userId: number) =>
 	prisma.notInterestedPet.create({ data: { petId, userId } })
 
+const addInterestedPet = async (petId: number, userId: number) =>
+	prisma.interestedPet.create({ data: { petId, userId } })
+
 const getNotInterestedPetByUserId = async (petId: number, userId: number) => {
 	return prisma.notInterestedPet.findFirst({ where: { petId, userId } })
+}
+
+const getInterestedPetByUserId = async (petId: number, userId: number) => {
+	return prisma.interestedPet.findFirst({ where: { petId, userId } })
+}
+
+const getAllInterestedPets = async (userId: number) => {
+	return prisma.interestedPet.findMany({ where: { userId } })
 }
 
 export default {
 	findAll,
 	getById,
 	addNotInterestedPet,
+	addInterestedPet,
 	getNotInterestedPetByUserId,
+	getInterestedPetByUserId,
+	getAllInterestedPets,
 }

@@ -24,6 +24,7 @@ model User {
   // messages_to_user   Message[]  @relation("to_user_id")
   NotInterestedPets NotInterestedPet[]
   Pet               Pet[]
+  InterestedPet     InterestedPet[]
 
   @@map("users")
 }
@@ -86,6 +87,16 @@ model NotInterestedPet {
   @@map("not_interested_pet")
 }
 
+model InterestedPet {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  petId  Int
+  pet    Pet  @relation(fields: [petId], references: [id])
+
+  @@map("interested_pet")
+}
+
 model Pet {
   id         Int     @id @default(autoincrement())
   name       String
@@ -105,6 +116,7 @@ model Pet {
   createdAt         DateTime           @default(now())
   petPictures       petPictures[]
   notInterestedPets NotInterestedPet[]
+  InterestedPet     InterestedPet[]
 
   @@map("pets")
 }

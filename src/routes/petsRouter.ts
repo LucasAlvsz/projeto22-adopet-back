@@ -1,6 +1,11 @@
 import { Router } from "express"
 
-import { addNotInterestedPet, getPetProfileById, getPets } from "@/controllers/petsController"
+import {
+	addInterestedPet,
+	addNotInterestedPet,
+	getPetProfileById,
+	getPets,
+} from "@/controllers/petsController"
 import validateBearerToken from "@/middlewares/validateBearerTokenMiddleware"
 
 import { filterQuerySchema } from "@/schemas/petsSchema"
@@ -12,4 +17,6 @@ petsRouter.use(validateBearerToken)
 petsRouter.get("", validateSchema(filterQuerySchema), getPets)
 petsRouter.get("/profile/:id", getPetProfileById)
 petsRouter.post("/:id/not-interested", addNotInterestedPet)
+petsRouter.post("/:id/interested", addInterestedPet)
+petsRouter.get("/interested")
 export default petsRouter
