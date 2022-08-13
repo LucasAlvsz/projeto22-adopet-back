@@ -9,6 +9,7 @@ const getPets = async (filter: Filter, userId: number, adressId: number) => {
 		const { state } = await adressRepository.getById(adressId)
 		filter.location = state.name
 	}
+	if (filter.vaccinated) filter.vaccinated = true
 	return await petsRepository.findAll(filter, userId)
 }
 

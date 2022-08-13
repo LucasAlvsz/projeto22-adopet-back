@@ -5,7 +5,6 @@ import userRepository from "@/respositories/userRepository"
 import adressRepository from "@/respositories/adressRepository"
 import { conflictError, notFoundError, unauthorizedError } from "@/errors"
 import { decryptAndcompare, encryptWithSalt } from "@/utils/cryptographyUtils"
-import queryFactory from "@/factories/queryFactory"
 
 const create = async (userData: SignUpData) => {
 	const user = await userRepository.getByEmail(userData.email)
