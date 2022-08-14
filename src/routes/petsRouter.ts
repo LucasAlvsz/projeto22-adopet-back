@@ -3,6 +3,7 @@ import { Router } from "express"
 import {
 	addInterestedPet,
 	addNotInterestedPet,
+	getInterestedPets,
 	getPetProfileById,
 	getPets,
 } from "@/controllers/petsController"
@@ -18,5 +19,5 @@ petsRouter.get("", validateSchema(filterQuerySchema), getPets)
 petsRouter.get("/profile/:id", getPetProfileById)
 petsRouter.post("/:id/not-interested", addNotInterestedPet)
 petsRouter.post("/:id/interested", addInterestedPet)
-petsRouter.get("/interested")
+petsRouter.get("/interested", validateSchema(filterQuerySchema), getInterestedPets)
 export default petsRouter

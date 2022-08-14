@@ -41,12 +41,13 @@ const addInterestedPet = async (petId: number, userId: number) => {
 	await petsRepository.addInterestedPet(petId, userId)
 }
 
-const getInterestedPets = async (petId: number, userId: number) => {
-	const pet = await queryFactory.getById(petId, "Pet")
-	if (!pet) throw notFoundError("pet not found")
-
-	const pets = await petsRepository.getAllInterestedPets(userId)
-	return pets
+const getInterestedPets = async (filter: Filter, userId: number, adressId: number) => {
+	if (filter.location) {
+		const { state } = await adressRepository.getById(adressId)
+		filter.location = state.name
+	}
+	if (filter.vaccinated) filter.vaccinated = true
+	return await petsRepository.getAllInterestedPets(filter, userId)
 }
 
 export default {

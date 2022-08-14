@@ -91,8 +91,48 @@ const getInterestedPetByUserId = async (petId: number, userId: number) => {
 	return prisma.interestedPet.findFirst({ where: { petId, userId } })
 }
 
-const getAllInterestedPets = async (userId: number) => {
-	return prisma.interestedPet.findMany({ where: { userId } })
+const getAllInterestedPets = async (filter: Filter, userId: number) => {
+	return prisma.interestedPet.findMany({
+		where: {
+			userId,
+			pet: {
+				...(filter.type && { type: filter.type }),
+				...(filter.location && {
+					ownerUser: {
+						adress: { city: { state: { name: { equals: filter.location } } } },
+					},
+				}),
+				...(filter.vaccinated && { vaccinated: filter.vaccinated }),
+			},
+		},
+		select: {
+			pet: {
+				select: {
+					id: true,
+					name: true,
+					type: true,
+					vaccinated: true,
+					petPictures: {
+						select: {
+							picture: {
+								select: { url: true },
+							},
+						},
+					},
+					ownerUser: {
+						select: {
+							adress: {
+								select: {
+									state: true,
+									city: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	})
 }
 
 export default {
