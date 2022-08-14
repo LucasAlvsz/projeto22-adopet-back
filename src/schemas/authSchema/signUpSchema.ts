@@ -8,6 +8,9 @@ const bodySchema = Joi.object<SignUpData>({
 	cep: Joi.string()
 		.pattern(/^\d{8}$/)
 		.required(),
+	phone: Joi.string()
+		.pattern(/^\(?([1-9]{2})\) ?([9]{1})?([0-9]{4})-?([0-9]{4})$/)
+		.required(),
 })
 	.required()
 	.options({ allowUnknown: false })

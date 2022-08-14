@@ -2,16 +2,11 @@ import { NextFunction, Request, Response } from "express"
 import { validateToken } from "@/utils/JWTUtils"
 import authHeaderSchema from "@/schemas/authSchema/authHeaderSchema"
 
-const validateBearerToken = (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
+const validateBearerToken = (req: Request, res: Response, next: NextFunction) => {
 	const { error } = authHeaderSchema.validate(req.headers, {
 		abortEarly: false,
 	})
-	if (error)
-		return res.status(401).send(error.details.map(({ message }) => message))
+	if (error) return res.status(401).send(error.details.map(({ message }) => message))
 	try {
 		const token = req.headers.authorization.split(" ")[1]
 		const userData = validateToken(token)

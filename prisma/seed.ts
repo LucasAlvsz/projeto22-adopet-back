@@ -10,6 +10,7 @@ const main = async () => {
 			name: "Lucax",
 			email: "lucax@gmail.com",
 			password: encryptWithSalt("lucaxlucax"),
+			phone: "(61) 99999-9999",
 			adressId: 1,
 		},
 	]
@@ -74,7 +75,7 @@ const main = async () => {
 			vaccinated: true,
 			about: faker.lorem.lines(),
 			breedId: 2,
-			ownerId: 1
+			ownerId: 1,
 		},
 	]
 	const notInterestedPets = [

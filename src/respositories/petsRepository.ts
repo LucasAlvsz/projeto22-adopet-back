@@ -20,6 +20,7 @@ const findAll = async (filter: Filter, userId: number) => {
 		select: {
 			id: true,
 			name: true,
+			type: true,
 			age: true,
 			weight: true,
 			vaccinated: true,
@@ -60,6 +61,7 @@ const getById = (petId: number) => {
 				select: {
 					name: true,
 					picUrl: true,
+					phone: true,
 
 					adress: {
 						select: {

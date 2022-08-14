@@ -5,7 +5,6 @@ import petService from "@/services/petsService"
 const getPets = async (req: Request, res: Response) => {
 	const filter: any = req.query || false
 	const { id: userId, adressId } = res.locals.userData
-	console.log(filter)
 	const pets = await petService.getPets(filter, userId, adressId)
 	res.send(pets)
 }
