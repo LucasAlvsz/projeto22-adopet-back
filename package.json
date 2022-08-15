@@ -10,8 +10,8 @@
 		"start": "node build/server.js",
 		"dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --exit-child --cls --rs -r dotenv/config -r tsconfig-paths/register src/server.ts",
 		"test": "jest -i --coverage",
-		"test:unit": "clear && jest -i --coverage ./tests/unit",
-		"test:integration": "clear && jest --i --verbose --coverage tests/integration"
+		"test:unit": "clear && jest -i --verbose --coverage --detectOpenHandles tests/unit",
+		"test:integration": "clear && jest --i --verbose --coverage --detectOpenHandles tests/integration"
 	},
 	"prisma": {
 		"seed": "ts-node prisma/seed.ts"
