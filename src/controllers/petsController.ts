@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 import petService from "@/services/petsService"
 
 const getPets = async (req: Request, res: Response) => {
-	const filter: any = req.query
+	const filter: any = req.query || false
 	const { id: userId, adressId } = res.locals.userData
 	const pets = await petService.getPets(filter, userId, adressId)
 	res.send(pets)
@@ -30,7 +30,7 @@ const addInterestedPet = async (req: Request, res: Response) => {
 }
 
 const getInterestedPets = async (req: Request, res: Response) => {
-	const filter: any = req.query
+	const filter: any = req.query || false
 	const { id: userId, adressId } = res.locals.userData
 	const pets = await petService.getInterestedPets(filter, userId, adressId)
 	res.send(pets)
