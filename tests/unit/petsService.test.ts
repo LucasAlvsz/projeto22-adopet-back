@@ -59,17 +59,18 @@ describe("Pets Service", () => {
 			expect(petsRepository.getById).toBeCalledTimes(0)
 		})
 
-		// it("Should throw conflict error", async () => {
-		// 	jest.spyOn(queryFactory, "getById").mockResolvedValueOnce(petsData())
-		// 	jest.spyOn(petsRepository, "getNotInterestedPetByUserId").mockResolvedValueOnce({
-		// 		id: 1,
-		// 	} as any)
+		it("Should throw conflict error", async () => {
+			jest.spyOn(queryFactory, "getById").mockResolvedValueOnce(petsData())
+			jest.spyOn(petsRepository, "getNotInterestedPetByUserId").mockResolvedValueOnce(true as any)
+			jest.spyOn(petsRepository, "getInterestedPetByUserId").mockResolvedValueOnce({
+				id: 1,
+			} as any)
 
-		// 	await expect(petsService.getProfileById(1)).rejects.toHaveProperty("status", 409)
-		// 	expect(queryFactory.getById).toBeCalledTimes(1)
-		// 	expect(queryFactory.getById).toBeCalledWith(1, "Pet")
-		// 	expect(petsRepository.getNotInterestedPetByUserId).toBeCalledTimes(1)
-		// 	expect(petsRepository.getById).toBeCalledTimes(0)
-		// })
+			await expect(petsService.getProfileById(1)).rejects.toHaveProperty("status", 409)
+			expect(queryFactory.getById).toBeCalledTimes(1)
+			expect(queryFactory.getById).toBeCalledWith(1, "Pet")
+			expect(petsRepository.getNotInterestedPetByUserId).toBeCalledTimes(1)
+			expect(petsRepository.getById).toBeCalledTimes(0)
+		})
 	})
 })

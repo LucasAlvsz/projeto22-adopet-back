@@ -1,4 +1,4 @@
-import { conflictError, notFoundError, unprocessableEntityError } from "@/errors"
+import { conflictError, notFoundError } from "@/errors"
 import queryFactory from "@/factories/queryFactory"
 import adressRepository from "@/respositories/adressRepository"
 import petsRepository from "@/respositories/petsRepository"
