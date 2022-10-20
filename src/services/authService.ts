@@ -32,6 +32,7 @@ const login = async (loginData: UserData) => {
 }
 
 const validateCep = async (cep: string) => {
+	cep = cep.replace(/\D/g, "")
 	const { data: adressData }: any = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
 	if (adressData.erro) throw notFoundError("Invalid CEP")
 	return adressData
