@@ -9,7 +9,7 @@ const bodySchema = Joi.object<SignUpData>({
 		.pattern(/^\d{5}-\d{3}$/)
 		.required(),
 	phone: Joi.string()
-		.pattern(/^\(?([1-9]{2})\) ?([9]{1})?([0-9]{4})-?([0-9]{4})$/)
+		.pattern(/^\(?(\d{2})\) ?([9]{1})?(\d{4})-?(\d{4})$/)
 		.required(),
 })
 	.required()
