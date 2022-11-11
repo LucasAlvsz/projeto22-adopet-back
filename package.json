@@ -1,13 +1,14 @@
 {
-	"name": "semnome",
+	"name": "adopet",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "server.js",
 	"repository": "git@github.com:LucasAlvsz/projeto22-semnome-back.git",
 	"author": "Lucas Alves Rodiruges <contato.lucasalv@gmai.com>",
 	"license": "MIT",
 	"scripts": {
+		"prisma:deploy": "prisma migrate deploy",
 		"build": "babel src --extensions '.js,.ts' --out-dir build --no-copy-ignored",
-		"start": "node build/server.js",
+		"start": "prisma:deploy && node build/server.js",
 		"dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --exit-child --cls --rs -r dotenv/config -r tsconfig-paths/register src/server.ts",
 		"test": "jest -i --coverage",
 		"test:unit": "clear && jest -i --verbose --coverage --detectOpenHandles tests/unit",
@@ -17,7 +18,7 @@
 		"seed": "ts-node prisma/seed.ts"
 	},
 	"dependencies": {
-		"@prisma/client": "4.1.1",
+		"@prisma/client": "^4.6.1",
 		"axios": "^0.27.2",
 		"bcrypt": "^5.0.1",
 		"cors": "^2.8.5",
@@ -25,8 +26,7 @@
 		"express-async-errors": "^3.1.1",
 		"joi": "^17.6.0",
 		"jsonwebtoken": "^8.5.1",
-		"socket.io": "^4.5.1",
-		"ts-node": "^10.9.1"
+		"socket.io": "^4.5.1"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.18.9",
@@ -53,6 +53,7 @@
 		"prisma": "4.1.1",
 		"supertest": "^6.2.4",
 		"ts-jest": "^28.0.7",
+		"ts-node": "^10.9.1",
 		"ts-node-dev": "^2.0.0",
 		"tsconfig-paths": "^4.0.0",
 		"typescript": "^4.7.4"
