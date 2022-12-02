@@ -8,7 +8,8 @@
 	"scripts": {
 		"prisma:deploy": "prisma migrate deploy",
 		"build": "babel src --extensions '.js,.ts' --out-dir build --no-copy-ignored",
-		"start": "prisma:deploy && node build/server.js",
+		"prestart": "prisma:deploy",
+		"start": "node build/server.js",
 		"dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --exit-child --cls --rs -r dotenv/config -r tsconfig-paths/register src/server.ts",
 		"test": "jest -i --coverage",
 		"test:unit": "clear && jest -i --verbose --coverage --detectOpenHandles tests/unit",
