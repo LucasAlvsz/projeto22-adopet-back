@@ -8,16 +8,7 @@
 		"target": "ES2017",
 		"baseUrl": "./src/",
 		"paths": {
-			"@/*": ["*"],
-			"@schemas/*": ["schemas/*"],
-			"@db/*": ["db/*"],
-			"@routes/*": ["routes/*"],
-			"@middlewares/*": ["middlewares/*"],
-			"@controllers/*": ["controllers/*"],
-			"@services/*": ["services/*"],
-			"@utils/*": ["utils/*"],
-			"@interfaces/*": ["types/*"],
-			"@repositories": ["repositories/*"]
+			"@/*": ["*"]
 		}
 	},
 	"ts-node": {
