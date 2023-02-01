@@ -1,35 +1,48 @@
-import { AppError } from "@/types/errorType"
+class AppError {
+	public readonly code: number
+	public readonly message: string
 
-const unauthorizedError = (message: string): AppError => {
-	return {
-		status: 401,
-		message,
-		type: "AppError",
+	constructor(code: number, message: string) {
+		this.code = code
+		this.message = message
 	}
 }
 
-const conflictError = (message: string) => {
-	return {
-		status: 409,
-		message,
-		type: "AppError",
+class InternalServerError extends AppError {
+	constructor(message: string) {
+		super(500, message)
 	}
 }
 
-const notFoundError = (message: string) => {
-	return {
-		status: 404,
-		message,
-		type: "AppError",
+class UnprocessableEntityError extends AppError {
+	constructor(message: string) {
+		super(422, message)
 	}
 }
 
-const unprocessableEntityError = (message: string) => {
-	return {
-		status: 422,
-		message,
-		type: "AppError",
+class UnauthorizedError extends AppError {
+	constructor(message: string) {
+		super(401, message)
 	}
 }
 
-export { unauthorizedError, conflictError, notFoundError, unprocessableEntityError }
+class ConflictError extends AppError {
+	constructor(message: string) {
+		super(409, message)
+	}
+}
+
+class NotFoundError extends AppError {
+	constructor(message: string) {
+		super(404, message)
+	}
+}
+
+export {
+	AppError,
+	InternalServerError,
+	UnprocessableEntityError,
+	UnauthorizedError,
+	ConflictError,
+	NotFoundError,
+}
