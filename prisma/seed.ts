@@ -2,14 +2,14 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 import { faker } from "@faker-js/faker"
-import { encryptWithSalt } from "../src/utils/cryptographyUtils"
+import { cryptographyUtils } from "../src/utils/"
 
 const main = async () => {
 	const users = [
 		{
 			name: "Lucax",
 			email: "lucax@gmail.com",
-			password: encryptWithSalt("lucaxlucax"),
+			password: cryptographyUtils.encryptWithSalt("lucaxlucax"),
 			phone: "(61) 99999-9999",
 			adressId: 1,
 		},
