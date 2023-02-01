@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 
+import { authService } from "@/services"
 import { SignUpData, UserData } from "@/types/userTypes"
-import authService from "@/services/authService"
 
 const signUp = async (req: Request, res: Response) => {
 	const userData: SignUpData = req.body
@@ -15,4 +15,4 @@ const signIn = async (req: Request, res: Response) => {
 	res.send(token)
 }
 
-export { signUp, signIn }
+export default { signUp, signIn }

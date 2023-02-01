@@ -1,7 +1,6 @@
 import { conflictError, notFoundError } from "@/errors"
-import queryFactory from "@/factories/queryFactory"
-import adressRepository from "@/respositories/adressRepository"
-import petsRepository from "@/respositories/petsRepository"
+import { queryFactory } from "@/factories"
+import { adressRepository, petsRepository } from "@/respositories"
 import { Filter } from "@/types/petTypes"
 
 const getPets = async (filter: Filter, userId: number, adressId: number) => {
@@ -22,9 +21,16 @@ const getProfileById = async (petId: number) => {
 const addNotInterestedPet = async (petId: number, userId: number) => {
 	const pet = await queryFactory.getById(petId, "Pet")
 	if (!pet) throw notFoundError("pet not found")
-	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(petId, userId)
-	if (notInterestedPet) throw conflictError("pet already marked as not interested")
-	const interestedPet = await petsRepository.getInterestedPetByUserId(petId, userId)
+	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(
+		petId,
+		userId
+	)
+	if (notInterestedPet)
+		throw conflictError("pet already marked as not interested")
+	const interestedPet = await petsRepository.getInterestedPetByUserId(
+		petId,
+		userId
+	)
 	if (interestedPet) throw conflictError("pet already marked as interested")
 
 	await petsRepository.addNotInterestedPet(petId, userId)
@@ -33,15 +39,26 @@ const addNotInterestedPet = async (petId: number, userId: number) => {
 const addInterestedPet = async (petId: number, userId: number) => {
 	const pet = await queryFactory.getById(petId, "Pet")
 	if (!pet) throw notFoundError("pet not found")
-	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(petId, userId)
-	if (notInterestedPet) throw conflictError("pet already marked as not interested")
-	const interestedPet = await petsRepository.getInterestedPetByUserId(petId, userId)
+	const notInterestedPet = await petsRepository.getNotInterestedPetByUserId(
+		petId,
+		userId
+	)
+	if (notInterestedPet)
+		throw conflictError("pet already marked as not interested")
+	const interestedPet = await petsRepository.getInterestedPetByUserId(
+		petId,
+		userId
+	)
 	if (interestedPet) throw conflictError("pet already marked as interested")
 
 	await petsRepository.addInterestedPet(petId, userId)
 }
 
-const getInterestedPets = async (filter: Filter, userId: number, adressId: number) => {
+const getInterestedPets = async (
+	filter: Filter,
+	userId: number,
+	adressId: number
+) => {
 	if (filter.location) {
 		const { state } = await adressRepository.getById(adressId)
 		filter.location = state.name

@@ -1,8 +1,7 @@
 import axios from "axios"
-import { encryptWithSalt } from "../../src/utils/cryptographyUtils"
-import adressRepository from "../../src/respositories/adressRepository"
-import userRepository from "../../src/respositories/userRepository"
-import authService from "../../src/services/authService"
+import { adressRepository, userRepository } from "../../src/respositories"
+import { authService } from "../../src/services"
+import { cryptographyUtils } from "../../src/utils"
 
 import { userData } from "./factories/authServiceFactory"
 
@@ -17,7 +16,9 @@ describe("Authentication Service", () => {
 			jest.spyOn(axios, "get").mockResolvedValueOnce({
 				data: { erro: false },
 			} as any)
-			jest.spyOn(adressRepository, "create").mockResolvedValueOnce(1 as any)
+			jest.spyOn(adressRepository, "create").mockResolvedValueOnce(
+				1 as any
+			)
 			jest.spyOn(userRepository, "create").mockResolvedValueOnce(null)
 
 			await authService.create(userData() as any)
@@ -26,11 +27,12 @@ describe("Authentication Service", () => {
 			expect(userRepository.create).toBeCalledTimes(1)
 		})
 		it("Should throw an error if the email is already registered", async () => {
-			jest.spyOn(userRepository, "getByEmail").mockResolvedValueOnce({} as any)
-			await expect(authService.create(userData() as any)).rejects.toHaveProperty(
-				"status",
-				409
+			jest.spyOn(userRepository, "getByEmail").mockResolvedValueOnce(
+				{} as any
 			)
+			await expect(
+				authService.create(userData() as any)
+			).rejects.toHaveProperty("status", 409)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
 			expect(adressRepository.create).toBeCalledTimes(0)
 			expect(userRepository.create).toBeCalledTimes(0)
@@ -41,10 +43,9 @@ describe("Authentication Service", () => {
 				data: { erro: "true" },
 			} as any)
 
-			await expect(authService.create(userData() as any)).rejects.toHaveProperty(
-				"status",
-				404
-			)
+			await expect(
+				authService.create(userData() as any)
+			).rejects.toHaveProperty("status", 404)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
 			expect(axios.get).toBeCalledTimes(1)
 			expect(adressRepository.create).toBeCalledTimes(0)
@@ -54,7 +55,7 @@ describe("Authentication Service", () => {
 	describe("Login", () => {
 		it("Should login", async () => {
 			jest.spyOn(userRepository, "getByEmail").mockResolvedValueOnce({
-				password: encryptWithSalt("12345689"),
+				password: cryptographyUtils.encryptWithSalt("12345689"),
 			} as any)
 
 			await expect(
@@ -64,14 +65,18 @@ describe("Authentication Service", () => {
 		})
 		it("Should throw an error if the email is invalid", async () => {
 			jest.spyOn(userRepository, "getByEmail").mockResolvedValueOnce(null)
-			await expect(authService.login(userData() as any)).rejects.toHaveProperty("status", 404)
+			await expect(
+				authService.login(userData() as any)
+			).rejects.toHaveProperty("status", 404)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
 		})
 		it("Should throw an error if the password is invalid", async () => {
 			jest.spyOn(userRepository, "getByEmail").mockResolvedValueOnce({
 				password: "12345678",
 			} as any)
-			await expect(authService.login(userData() as any)).rejects.toHaveProperty("status", 401)
+			await expect(
+				authService.login(userData() as any)
+			).rejects.toHaveProperty("status", 401)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
 		})
 	})

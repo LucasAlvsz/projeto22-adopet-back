@@ -1,23 +1,25 @@
 import { Router } from "express"
 
-import {
-	addInterestedPet,
-	addNotInterestedPet,
-	getInterestedPets,
-	getPetProfileById,
-	getPets,
-} from "@/controllers/petsController"
-import validateBearerToken from "@/middlewares/validateBearerTokenMiddleware"
-
-import { filterQuerySchema } from "@/schemas/petsSchema"
-import validateSchema from "@/middlewares/validateSchemaMiddleware"
+import { petsController } from "@/controllers"
+import { validateBearerToken, validateSchema } from "@/middlewares"
+import { petsSchema } from "@/schemas"
 
 const petsRouter = Router()
 
-petsRouter.use(validateBearerToken)
-petsRouter.get("", validateSchema(filterQuerySchema), getPets)
-petsRouter.get("/profile/:id", getPetProfileById)
-petsRouter.post("/:id/not-interested", addNotInterestedPet)
-petsRouter.post("/:id/interested", addInterestedPet)
-petsRouter.get("/interested", validateSchema(filterQuerySchema), getInterestedPets)
+petsRouter
+	.use(validateBearerToken)
+	.get(
+		"",
+		validateSchema(petsSchema.filterQuerySchema),
+		petsController.getPets
+	)
+	.get("/profile/:id", petsController.getPetProfileById)
+	.post("/:id/not-interested", petsController.addNotInterestedPet)
+	.post("/:id/interested", petsController.addInterestedPet)
+	.get(
+		"/interested",
+		validateSchema(petsSchema.filterQuerySchema),
+		petsController.getInterestedPets
+	)
+
 export default petsRouter

@@ -1,5 +1,5 @@
-import signUpchema from "./signUpSchema"
-import signInSchema from "./signInSchema"
 import authHeaderSchema from "./authHeaderSchema"
+import signInSchema from "./signInSchema"
+import signUpchema from "./signUpSchema"
 
-export { signInSchema, signUpchema, authHeaderSchema }
+export default { signInSchema, signUpchema, authHeaderSchema }

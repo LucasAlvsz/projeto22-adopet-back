@@ -1,5 +1,6 @@
-import { SignUpData } from "@/types/userTypes"
 import Joi from "joi"
+
+import { SignUpData } from "@/types/userTypes"
 
 const bodySchema = Joi.object<SignUpData>({
 	name: Joi.string().required(),

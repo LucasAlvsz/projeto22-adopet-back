@@ -1,7 +1,7 @@
 import { Router } from "express"
 import "express-async-errors"
 
-import handleError from "@/middlewares/handlerErrorMiddleware"
+import { handleError } from "@/middlewares"
 import authRouter from "./authRouter"
 import petsRouter from "./petsRouter"
 

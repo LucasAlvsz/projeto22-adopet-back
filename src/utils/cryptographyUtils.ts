@@ -8,4 +8,4 @@ const decryptAndcompare = (password: string, comparedPassword: string) => {
 	return bcrypt.compareSync(password, comparedPassword)
 }
 
-export { encryptWithSalt, decryptAndcompare }
+export default { encryptWithSalt, decryptAndcompare }

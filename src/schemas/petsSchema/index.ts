@@ -1,3 +1,3 @@
 import filterQuerySchema from "./filterQuerySchema"
 
-export { filterQuerySchema }
+export default { filterQuerySchema }

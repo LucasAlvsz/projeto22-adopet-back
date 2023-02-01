@@ -7,4 +7,4 @@ const validateToken = (token: string) => {
 	return jwt.verify(token, process.env.JWT_SECRET)
 }
 
-export { generateToken, validateToken }
+export default { generateToken, validateToken }
