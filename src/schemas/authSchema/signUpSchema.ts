@@ -16,8 +16,8 @@ const bodySchema = Joi.object<SignUpData>({
 	.required()
 	.options({ allowUnknown: false })
 
-const signUpchema = Joi.object({
+const signUpSchema = Joi.object({
 	body: bodySchema,
 }).options({ allowUnknown: true })
 
-export default signUpchema
+export default signUpSchema

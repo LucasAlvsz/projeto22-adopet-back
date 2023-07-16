@@ -8,7 +8,7 @@ const authRouter = Router()
 
 authRouter.post(
 	"/sign-up",
-	validateSchema(authSchema.signUpchema),
+	validateSchema(authSchema.signUpSchema),
 	authController.signUp
 )
 authRouter.post(

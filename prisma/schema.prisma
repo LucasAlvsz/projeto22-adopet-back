@@ -21,8 +21,6 @@ model User {
 
   addressId         Int
   address           Address            @relation(fields: [addressId], references: [id])
-  // messages_from_user Message[]  @relation("from_user_id")
-  // messages_to_user   Message[]  @relation("to_user_id")
   NotInterestedPets NotInterestedPet[]
   Pet               Pet[]
   InterestedPet     InterestedPet[]
@@ -118,23 +116,3 @@ enum PetType {
   dog
   cat
 }
-
-// model ChatRoom {
-//   id        Int      @id @default(autoincrement())
-
-//   createdAt DateTime @default(now())
-
-// }
-
-// model Message {
-//   id      Int    @id @default(autoincrement())
-//   message String
-//   fromId  Int
-//   from    User   @relation("from_user_id", fields: [fromId], references: [id])
-//   toId    Int
-//   to      User   @relation("to_user_id", fields: [toId], references: [id])
-
-//   createdAt DateTime @default(now())
-
-//   @@map("messages")
-// }

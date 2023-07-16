@@ -8,7 +8,7 @@ const handleError = (
 	res: Response,
 	next: NextFunction
 ) => {
-	console.log(err.message)
+	console.error(err.message)
 
 	err instanceof AppError
 		? res.status(err.code).send({ error: { message: err.message } })

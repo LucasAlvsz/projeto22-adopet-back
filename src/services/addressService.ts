@@ -18,7 +18,6 @@ const create = async (CEP: string) => {
 const validateCEP = async (CEP: string) => {
 	CEP = CEP.replace(/\D/g, "")
 	const response = await fetch(`${process.env.BRASIL_API_URL}/cep/v1/${CEP}`)
-	console.log(response.status)
 	if (response.status === 404) throw new NotFoundError("CEP not found")
 
 	return response.json() as Promise<CEPResponse>
