@@ -40,7 +40,7 @@ describe("Pets Service", () => {
 			jest.spyOn(queryFactory, "getById").mockResolvedValueOnce(null)
 
 			await expect(petsService.getProfileById(1)).rejects.toHaveProperty(
-				"status",
+				"code",
 				404
 			)
 			expect(queryFactory.getById).toBeCalledTimes(1)
@@ -73,7 +73,7 @@ describe("Pets Service", () => {
 			jest.spyOn(queryFactory, "getById").mockResolvedValueOnce(null)
 
 			await expect(petsService.getProfileById(1)).rejects.toHaveProperty(
-				"status",
+				"code",
 				404
 			)
 			expect(queryFactory.getById).toBeCalledTimes(1)
@@ -97,7 +97,7 @@ describe("Pets Service", () => {
 			} as any)
 
 			await expect(petsService.getProfileById(1)).rejects.toHaveProperty(
-				"status",
+				"code",
 				409
 			)
 			expect(queryFactory.getById).toBeCalledTimes(1)

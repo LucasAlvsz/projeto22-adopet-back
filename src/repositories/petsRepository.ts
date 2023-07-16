@@ -8,7 +8,7 @@ const findAll = async (filter: Filter, userId: number) => {
 			...(filter.location && {
 				ownerUser: {
 					address: {
-						city: { state: { name: { equals: filter.location } } },
+						state: { equals: filter.location },
 					},
 				},
 			}),
@@ -35,9 +35,9 @@ const findAll = async (filter: Filter, userId: number) => {
 					name: true,
 					address: {
 						select: {
-							city: { select: { name: true } },
-							state: { select: { name: true } },
-							district: { select: { name: true } },
+							city: true,
+							state: true,
+							district: true,
 						},
 					},
 				},
@@ -69,9 +69,9 @@ const getById = (petId: number) => {
 
 					address: {
 						select: {
-							city: { select: { name: true } },
-							state: { select: { name: true } },
-							district: { select: { name: true } },
+							city: true,
+							state: true,
+							district: true,
 						},
 					},
 				},
@@ -104,9 +104,7 @@ const getAllInterestedPets = async (filter: Filter, userId: number) => {
 				...(filter.location && {
 					ownerUser: {
 						address: {
-							city: {
-								state: { name: { equals: filter.location } },
-							},
+							state: { equals: filter.location },
 						},
 					},
 				}),

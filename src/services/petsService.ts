@@ -6,7 +6,7 @@ import { Filter } from "@/types/petTypes"
 const getPets = async (filter: Filter, userId: number, addressId: number) => {
 	if (filter.location) {
 		const { state } = await addressRepository.getById(addressId)
-		filter.location = state.name
+		filter.location = state
 	}
 	if (filter.vaccinated) filter.vaccinated = true
 
@@ -65,7 +65,7 @@ const getInterestedPets = async (
 ) => {
 	if (filter.location) {
 		const { state } = await addressRepository.getById(addressId)
-		filter.location = state.name
+		filter.location = state
 	}
 	if (filter.vaccinated) filter.vaccinated = true
 	return petsRepository.getAllInterestedPets(filter, userId)
