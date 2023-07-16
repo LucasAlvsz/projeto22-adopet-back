@@ -9,38 +9,19 @@ const main = async () => {
 		{
 			name: "Lucax",
 			email: "lucax@gmail.com",
-			password: cryptographyUtils.encryptWithSalt("lucaxlucax"),
+			password: cryptographyUtils.hashWithSalt("lucaxlucax"),
 			phone: "(61) 99999-9999",
-			adressId: 1,
+			addressId: 1,
 		},
 	]
 
-	const states = [
+	const addresses = [
 		{
-			name: "DF",
-		},
-	]
-
-	const city = [
-		{
-			name: "Brasília",
-			stateId: 1,
-		},
-	]
-
-	const districts = [
-		{
-			name: "Santa Maria",
-			cityId: 1,
-		},
-	]
-
-	const adresses = [
-		{
-			stateId: 1,
-			cityId: 1,
-			districtId: 1,
-			CEP: "72547378",
+			cep: "72547378",
+			street: "Quadra 417 Conjunto 8",
+			state: "DF",
+			city: "Brasília",
+			district: "Santa Maria",
 		},
 	]
 
@@ -106,7 +87,6 @@ const main = async () => {
 			petId: 2,
 		},
 	]
-
 	const pictures = [
 		{
 			url: "https://www.petz.com.br/blog/wp-content/uploads/2020/11/pode-dar-plasil-para-cachorro.jpg",
@@ -130,7 +110,6 @@ const main = async () => {
 			url: "https://t2.ea.ltmcdn.com/pt/posts/5/2/3/o_que_e_um_gato_vira_lata_21325_0_600.jpg",
 		},
 	]
-
 	const petPics = [
 		{
 			petId: 1,
@@ -161,10 +140,7 @@ const main = async () => {
 			pictureId: 7,
 		},
 	]
-	await prisma.state.createMany({ data: states })
-	await prisma.city.createMany({ data: city })
-	await prisma.district.createMany({ data: districts })
-	await prisma.adress.createMany({ data: adresses })
+	await prisma.address.createMany({ data: addresses })
 	await prisma.user.createMany({ data: users })
 	await prisma.breed.createMany({ data: breeds })
 	await prisma.pet.createMany({ data: pets })

@@ -6,7 +6,11 @@ const findAll = async (filter: Filter, userId: number) => {
 		where: {
 			...(filter.type && { type: filter.type }),
 			...(filter.location && {
-				ownerUser: { adress: { city: { state: { name: { equals: filter.location } } } } },
+				ownerUser: {
+					address: {
+						city: { state: { name: { equals: filter.location } } },
+					},
+				},
 			}),
 			...(filter.vaccinated && { vaccinated: filter.vaccinated }),
 
@@ -29,7 +33,7 @@ const findAll = async (filter: Filter, userId: number) => {
 			ownerUser: {
 				select: {
 					name: true,
-					adress: {
+					address: {
 						select: {
 							city: { select: { name: true } },
 							state: { select: { name: true } },
@@ -63,7 +67,7 @@ const getById = (petId: number) => {
 					picUrl: true,
 					phone: true,
 
-					adress: {
+					address: {
 						select: {
 							city: { select: { name: true } },
 							state: { select: { name: true } },
@@ -99,7 +103,11 @@ const getAllInterestedPets = async (filter: Filter, userId: number) => {
 				...(filter.type && { type: filter.type }),
 				...(filter.location && {
 					ownerUser: {
-						adress: { city: { state: { name: { equals: filter.location } } } },
+						address: {
+							city: {
+								state: { name: { equals: filter.location } },
+							},
+						},
 					},
 				}),
 				...(filter.vaccinated && { vaccinated: filter.vaccinated }),
@@ -121,7 +129,7 @@ const getAllInterestedPets = async (filter: Filter, userId: number) => {
 					},
 					ownerUser: {
 						select: {
-							adress: {
+							address: {
 								select: {
 									state: true,
 									city: true,

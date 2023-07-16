@@ -1,5 +1,5 @@
 import { queryFactory } from "../../src/factories"
-import { petsRepository } from "../../src/respositories"
+import { petsRepository } from "../../src/repositories"
 import { petsService } from "../../src/services"
 import { petsData } from "./factories/petsServiceFactory"
 
@@ -12,9 +12,9 @@ describe("Pets Service", () => {
 		it("Should return all pets", async () => {
 			jest.spyOn(petsRepository, "findAll").mockResolvedValueOnce([])
 
-			const { filter, userId, adressId } = petsData()
+			const { filter, userId, addressId } = petsData()
 			await expect(
-				petsService.getPets(filter, userId, adressId)
+				petsService.getPets(filter, userId, addressId)
 			).resolves.toHaveProperty("length", 0)
 			expect(petsRepository.findAll).toBeCalledTimes(1)
 		})

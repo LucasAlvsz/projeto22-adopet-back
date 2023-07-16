@@ -4,8 +4,8 @@ import { petsService } from "@/services"
 
 const getPets = async (req: Request, res: Response) => {
 	const filter: any = req.query || false
-	const { id: userId, adressId } = res.locals.userData
-	const pets = await petsService.getPets(filter, userId, adressId)
+	const { id: userId, addressId } = res.locals.userData
+	const pets = await petsService.getPets(filter, userId, addressId)
 	res.send(pets)
 }
 
@@ -31,8 +31,8 @@ const addInterestedPet = async (req: Request, res: Response) => {
 
 const getInterestedPets = async (req: Request, res: Response) => {
 	const filter: any = req.query || false
-	const { id: userId, adressId } = res.locals.userData
-	const pets = await petsService.getInterestedPets(filter, userId, adressId)
+	const { id: userId, addressId } = res.locals.userData
+	const pets = await petsService.getInterestedPets(filter, userId, addressId)
 	res.send(pets)
 }
 

@@ -1,49 +1,33 @@
-import axios from "axios"
-
-import { ConflictError, NotFoundError, UnauthorizedError } from "@/errors"
-import { adressRepository, userRepository } from "@/respositories"
-import { SignUpData, UserData } from "@/types/userTypes"
+import { addressService } from "@/services"
+import { userRepository } from "@/repositories"
 import { cryptographyUtils, JWTUtils } from "@/utils"
+import { SignUpData, UserData } from "@/types/userTypes"
+import { ConflictError, NotFoundError, UnauthorizedError } from "@/errors"
 
 const create = async (userData: SignUpData) => {
 	const user = await userRepository.getByEmail(userData.email)
 	if (user) throw new ConflictError("Email already registered")
-	const { uf, localidade, bairro } = await validateCep(userData.cep)
 
-	const { id: adressId } = await adressRepository.create({
-		cep: userData.cep,
-		state: uf,
-		city: localidade,
-		district: bairro,
-	})
-
+	const { addressId } = await addressService.create(userData.cep)
 	delete userData.cep
-	userData = {
-		...userData,
-		password: cryptographyUtils.encryptWithSalt(userData.password),
-		adressId,
-	}
 
-	await userRepository.create(userData)
+	const hashedPassword = cryptographyUtils.hashWithSalt(userData.password)
+
+	await userRepository.create({
+		...userData,
+		password: hashedPassword,
+		addressId,
+	})
 }
 
 const login = async (loginData: UserData) => {
 	const user = await userRepository.getByEmail(loginData.email)
 	if (!user) throw new NotFoundError("Invalid email")
-	if (!cryptographyUtils.decryptAndcompare(loginData.password, user.password))
+	if (!cryptographyUtils.compare(loginData.password, user.password))
 		throw new UnauthorizedError("Invalid password")
 
-	const { id, adressId } = user
-	return { token: JWTUtils.generateToken({ id, adressId }) }
-}
-
-const validateCep = async (cep: string) => {
-	cep = cep.replace(/\D/g, "")
-	const { data: adressData }: any = await axios.get(
-		`https://viacep.com.br/ws/${cep}/json/`
-	)
-	if (adressData.erro) throw new NotFoundError("Invalid CEP")
-	return adressData
+	const { id, addressId } = user
+	return { token: JWTUtils.generateToken({ id, addressId }) }
 }
 
 export default { create, login }

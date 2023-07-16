@@ -1,11 +1,11 @@
 import { ConflictError, NotFoundError } from "@/errors"
 import { queryFactory } from "@/factories"
-import { adressRepository, petsRepository } from "@/respositories"
+import { addressRepository, petsRepository } from "@/repositories"
 import { Filter } from "@/types/petTypes"
 
-const getPets = async (filter: Filter, userId: number, adressId: number) => {
+const getPets = async (filter: Filter, userId: number, addressId: number) => {
 	if (filter.location) {
-		const { state } = await adressRepository.getById(adressId)
+		const { state } = await addressRepository.getById(addressId)
 		filter.location = state.name
 	}
 	if (filter.vaccinated) filter.vaccinated = true
@@ -61,10 +61,10 @@ const addInterestedPet = async (petId: number, userId: number) => {
 const getInterestedPets = async (
 	filter: Filter,
 	userId: number,
-	adressId: number
+	addressId: number
 ) => {
 	if (filter.location) {
-		const { state } = await adressRepository.getById(adressId)
+		const { state } = await addressRepository.getById(addressId)
 		filter.location = state.name
 	}
 	if (filter.vaccinated) filter.vaccinated = true

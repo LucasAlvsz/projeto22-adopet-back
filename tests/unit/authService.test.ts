@@ -1,5 +1,5 @@
 import axios from "axios"
-import { adressRepository, userRepository } from "../../src/respositories"
+import { addressRepository, userRepository } from "../../src/repositories"
 import { authService } from "../../src/services"
 import { cryptographyUtils } from "../../src/utils"
 
@@ -16,14 +16,14 @@ describe("Authentication Service", () => {
 			jest.spyOn(axios, "get").mockResolvedValueOnce({
 				data: { erro: false },
 			} as any)
-			jest.spyOn(adressRepository, "create").mockResolvedValueOnce(
+			jest.spyOn(addressRepository, "create").mockResolvedValueOnce(
 				1 as any
 			)
 			jest.spyOn(userRepository, "create").mockResolvedValueOnce(null)
 
 			await authService.create(userData() as any)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
-			expect(adressRepository.create).toBeCalledTimes(1)
+			expect(addressRepository.create).toBeCalledTimes(1)
 			expect(userRepository.create).toBeCalledTimes(1)
 		})
 		it("Should throw an error if the email is already registered", async () => {
@@ -34,7 +34,7 @@ describe("Authentication Service", () => {
 				authService.create(userData() as any)
 			).rejects.toHaveProperty("status", 409)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
-			expect(adressRepository.create).toBeCalledTimes(0)
+			expect(addressRepository.create).toBeCalledTimes(0)
 			expect(userRepository.create).toBeCalledTimes(0)
 		})
 		it("Should throw an error if the CEP is invalid", async () => {
@@ -48,7 +48,7 @@ describe("Authentication Service", () => {
 			).rejects.toHaveProperty("status", 404)
 			expect(userRepository.getByEmail).toBeCalledTimes(1)
 			expect(axios.get).toBeCalledTimes(1)
-			expect(adressRepository.create).toBeCalledTimes(0)
+			expect(addressRepository.create).toBeCalledTimes(0)
 			expect(userRepository.create).toBeCalledTimes(0)
 		})
 	})
