@@ -1,0 +1,34 @@
+services:
+  adopet-database:
+    container_name: database
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    networks:
+      - adopet-network
+    env_file:
+      - .env
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  adopet-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - adopet-network
+    depends_on:
+      - adopet-database
+    env_file:
+      - .env
+
+volumes:
+  db-data:
+
+networks:
+  adopet-network:
+    driver: bridge
+    
+
+

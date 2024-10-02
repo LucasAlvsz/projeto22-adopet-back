@@ -7,7 +7,10 @@ import { handleError } from "@/middlewares"
 
 const router = Router()
 router
-	.get("/health", (_, res) => res.send("OK"))
+	.get("/health", (_, res) => res.send({
+		status: "OK",
+		message: "Server is running"
+	}))
 	.use(authRouter)
 	.use("/pets", petsRouter)
 	.use(handleError)
