@@ -1,3 +1,4 @@
-import filterQuerySchema from "./filterQuerySchema"
+import filterQuerySchema from "./filterQuerySchema";
+import petSchema from "./petSchema";
 
-export default { filterQuerySchema }
+export default { filterQuerySchema, petSchema };

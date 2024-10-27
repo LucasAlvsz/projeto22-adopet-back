@@ -3,8 +3,8 @@ import Joi from "joi"
 
 const querySchema = Joi.object<Filter>({
 	location: Joi.boolean(),
-	type: Joi.string().valid("dog", "cat"),
 	vaccinated: Joi.boolean(),
+	type: Joi.string().valid("dog", "cat"),
 }).options({ allowUnknown: false })
 
 const filterQuerySchema = Joi.object({

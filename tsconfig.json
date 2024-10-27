@@ -1,18 +1,15 @@
 {
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"module": "CommonJS",
+		"module": "ES2022",
 		"moduleResolution": "node",
 		"outDir": "./build",
 		"rootDir": ".",
-		"target": "ES2017",
+		"target": "ES2022",
 		"baseUrl": "./src/",
 		"paths": {
 			"@/*": ["*"]
 		}
 	},
-	"ts-node": {
-		"esm": true
-	},
-	"include": ["src/**/*", "../tests/**/*"]
+	"include": ["src/**/*", "tests/**/*"]
 }

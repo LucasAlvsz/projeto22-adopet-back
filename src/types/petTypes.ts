@@ -1,11 +1,17 @@
 import { Pet } from "@prisma/client"
 
+type PetData = Omit<Pet, "id" | "createdAt">
+
+type PetPayloadData = Omit<PetData, "ownerId">
+
 type Filter = {
-	location?: string
-	type?: "dog" | "cat"
+	location?: boolean
 	vaccinated?: boolean
+	type?: "dog" | "cat"
 }
 
-type PetData = Omit<Pet, "id" | "ownerId" | "breedId" | "createdAt">
+type EnrichedFilter = Omit<Filter, "location"> & {
+	location?: string
+}
 
-export { Filter, PetData }
+export { PetData, PetPayloadData, Filter, EnrichedFilter }

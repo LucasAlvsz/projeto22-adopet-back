@@ -21,9 +21,9 @@ model User {
 
   addressId         Int
   address           Address            @relation(fields: [addressId], references: [id])
-  NotInterestedPets NotInterestedPet[]
-  Pet               Pet[]
-  InterestedPet     InterestedPet[]
+  pet               Pet[]
+  notInterestedPets NotInterestedPet[]
+  interestedPets    InterestedPet[]
 
   @@map("users")
 }
@@ -35,7 +35,9 @@ model Address {
   state    String
   city     String
   district String
-  User     User[]
+  user     User[]
+
+  @@map("addresses")
 }
 
 model NotInterestedPet {
@@ -45,7 +47,7 @@ model NotInterestedPet {
   petId  Int
   pet    Pet  @relation(fields: [petId], references: [id])
 
-  @@map("not_interested_pet")
+  @@map("not_interested_pets")
 }
 
 model InterestedPet {
@@ -55,7 +57,7 @@ model InterestedPet {
   petId  Int
   pet    Pet  @relation(fields: [petId], references: [id])
 
-  @@map("interested_pet")
+  @@map("interested_pets")
 }
 
 model Pet {
@@ -75,16 +77,16 @@ model Pet {
   breed   Breed @relation(fields: [breedId], references: [id])
 
   createdAt         DateTime           @default(now())
-  petPictures       petPictures[]
+  petPictures       PetPictures[]
   notInterestedPets NotInterestedPet[]
-  InterestedPet     InterestedPet[]
+  interestedPets    InterestedPet[]
 
   @@map("pets")
 }
 
 model Breed {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   type      PetType
   createdAt DateTime @default(now())
   pets      Pet[]
@@ -92,7 +94,7 @@ model Breed {
   @@map("breeds")
 }
 
-model petPictures {
+model PetPictures {
   id        Int      @id @default(autoincrement())
   petId     Int
   pet       Pet      @relation(fields: [petId], references: [id])
@@ -107,7 +109,7 @@ model Picture {
   id          Int           @id @default(autoincrement())
   url         String
   createdAt   DateTime      @default(now())
-  petPictures petPictures[]
+  petPictures PetPictures[]
 
   @@map("pictures")
 }
@@ -115,4 +117,6 @@ model Picture {
 enum PetType {
   dog
   cat
+
+  @@map("pet_types")
 }
