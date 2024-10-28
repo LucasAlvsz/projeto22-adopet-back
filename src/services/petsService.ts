@@ -99,7 +99,7 @@ const createPet = async (
 
   const createdPictures = await picturesRepository.createMany(
     petPictures.map(({ filename }) => ({
-      url: `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/public/${filename}`,
+      url: `${process.env.PUBLIC_IMAGES_URL}/${filename}`,
     }))
   );
 
@@ -110,7 +110,7 @@ const createPet = async (
     }))
   );
 
-  return createdPet;
+  return { pet: createdPet };
 };
 
 export default {

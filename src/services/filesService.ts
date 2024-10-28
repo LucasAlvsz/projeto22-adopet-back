@@ -14,4 +14,12 @@ const uploadPublicTempFilesToS3 = async (files: Express.Multer.File[]) => {
   return uploadedFiles;
 };
 
-export default { uploadPublicTempFilesToS3 };
+const deleteTempFiles = async (files: Express.Multer.File[]) => {
+  await Promise.all(
+    files.map(async (file) => {
+      await unlink(file.path);
+    })
+  );
+};
+
+export default { uploadPublicTempFilesToS3, deleteTempFiles };

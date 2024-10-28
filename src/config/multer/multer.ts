@@ -10,6 +10,11 @@ import { MAX_PET_PICTURES, PET_PICTURE_MAX_SIZE } from "./magicNumbers";
 
 type StorageType = "local";
 
+export interface MulterRequest extends Request {
+  file?: Express.Multer.File;
+  files?: Express.Multer.File[];
+}
+
 const ensureDirectoryExists = (dirPath: string) => {
   if (!existsSync(dirPath)) {
     mkdirSync(dirPath, { recursive: true });
@@ -53,8 +58,7 @@ const imageOptions = {
       return cb(
         new UnprocessableEntityError(
           `Invalid file type. Only ${allowedMimes.join(", ")} are allowed`
-        ),
-        false
+        )
       );
     }
     cb(null, true);
