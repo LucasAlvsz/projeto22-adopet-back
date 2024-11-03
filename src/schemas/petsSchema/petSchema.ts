@@ -4,12 +4,12 @@ import { PetPayloadData } from "@/types/petTypes";
 const bodySchema = Joi.object<PetPayloadData>({
   name: Joi.string().required(),
   age: Joi.number().required(),
-  sex: Joi.string().required(),
+  sex: Joi.string().valid("Male", "Female").required(),
   weight: Joi.number().required(),
   vaccinated: Joi.boolean().required(),
   about: Joi.string().required(),
   breedId: Joi.number().required(),
-  type: Joi.string().valid("dog", "cat").required(), // TODO: validate type
+  petTypeId: Joi.number().required(),
 });
 
 const petSchema = Joi.object({

@@ -12,12 +12,10 @@ const upload = multer(imageUploadOptions.imageOptions);
 const uploadSingleFile = (fieldName: string = "image") => {
   return (req: Request, res: Response, next: NextFunction) => {
     upload.single(fieldName)(req, res, (err) => {
-      console.log("uploadSingleFile:", err);
       if (err instanceof multer.MulterError) {
         if (err.code === "LIMIT_FILE_SIZE") {
           throw new UnprocessableEntityError(
-            `File size is too large. Max size is ${
-              PET_PICTURE_MAX_SIZE / 1024 / 1024
+            `File size is too large. Max size is ${PET_PICTURE_MAX_SIZE / 1024 / 1024
             }MB`
           );
         }
@@ -38,9 +36,8 @@ const uploadMultipleFiles = (
         if (err instanceof MulterError) {
           if (err.code === "LIMIT_FILE_SIZE")
             return res.status(422).json({
-              message: `File size is too large. Max size is ${
-                PET_PICTURE_MAX_SIZE / 1024 / 1024
-              }MB`,
+              message: `File size is too large. Max size is ${PET_PICTURE_MAX_SIZE / 1024 / 1024
+                }MB`,
             });
 
           if (err.code === "LIMIT_FILE_COUNT")

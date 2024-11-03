@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
   password  String
@@ -19,7 +19,7 @@ model User {
   phone     String
   createdAt DateTime @default(now())
 
-  addressId         Int
+  addressId         String
   address           Address            @relation(fields: [addressId], references: [id])
   pet               Pet[]
   notInterestedPets NotInterestedPet[]
@@ -29,7 +29,7 @@ model User {
 }
 
 model Address {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(cuid())
   cep      String
   street   String
   state    String
@@ -41,21 +41,21 @@ model Address {
 }
 
 model NotInterestedPet {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
   petId  Int
-  pet    Pet  @relation(fields: [petId], references: [id])
+  pet    Pet    @relation(fields: [petId], references: [id])
 
   @@map("not_interested_pets")
 }
 
 model InterestedPet {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
   petId  Int
-  pet    Pet  @relation(fields: [petId], references: [id])
+  pet    Pet    @relation(fields: [petId], references: [id])
 
   @@map("interested_pets")
 }
@@ -63,15 +63,17 @@ model InterestedPet {
 model Pet {
   id         Int     @id @default(autoincrement())
   name       String
-  type       PetType
   age        Int
   weight     Float
-  sex        String
+  sex        PetSex
   vaccinated Boolean
   about      String
 
-  ownerId   Int
-  ownerUser User @relation(fields: [ownerId], references: [id])
+  petTypeId Int
+  type      PetType @relation(fields: [petTypeId], references: [id])
+
+  ownerId   String
+  ownerUser User   @relation(fields: [ownerId], references: [id])
 
   breedId Int
   breed   Breed @relation(fields: [breedId], references: [id])
@@ -84,12 +86,21 @@ model Pet {
   @@map("pets")
 }
 
+enum PetSex {
+  Male
+  Female
+
+  @@map("pet_sex")
+}
+
 model Breed {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  type      PetType
   createdAt DateTime @default(now())
   pets      Pet[]
+
+  petTypeId Int
+  type      PetType @relation(fields: [petTypeId], references: [id])
 
   @@map("breeds")
 }
@@ -114,9 +125,12 @@ model Picture {
   @@map("pictures")
 }
 
-enum PetType {
-  dog
-  cat
+model PetType {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  pets      Pet[]
+  Breed     Breed[]
 
   @@map("pet_types")
 }

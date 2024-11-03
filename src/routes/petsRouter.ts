@@ -9,6 +9,12 @@ const petsRouter = Router();
 
 petsRouter
   .use(validateBearerToken)
+  .post(
+    "/create",
+    handleUploadFilesMiddleware.uploadMultipleFiles(),
+    validateSchema(petsSchema.petSchema),
+    petsController.createPet
+  )
   .get("", validateSchema(petsSchema.filterQuerySchema), petsController.getPets)
   .get("/profile/:id", petsController.getPetProfileById)
   .post("/:id/not-interested", petsController.addNotInterestedPet)
@@ -19,10 +25,20 @@ petsRouter
     petsController.getInterestedPets
   )
   .post(
-    "/create",
-    handleUploadFilesMiddleware.uploadMultipleFiles(),
-    validateSchema(petsSchema.petSchema),
-    petsController.createPet
-  );
+    "/breeds",
+    validateSchema(petsSchema.breedSchema),
+    petsController.createBreed
+  )
+  .get(
+    "/breeds",
+    validateSchema(petsSchema.breedQuerySchema),
+    petsController.getAllBreeds
+  )
+  .post(
+    "/types",
+    validateSchema(petsSchema.petTypeSchema),
+    petsController.createPetType
+  )
+  .get("/types", petsController.getAllPetTypes);
 
 export default petsRouter;

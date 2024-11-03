@@ -7,4 +7,10 @@ const getById = async (id: number, model: Prisma.ModelName) => {
   });
 };
 
-export default { getById };
+const getByUnique = async (unique: string, model: Prisma.ModelName) => {
+  return await prisma[model].findUnique({
+    where: { unique },
+  });
+};
+
+export default { getById, getByUnique };

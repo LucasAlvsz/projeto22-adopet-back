@@ -1,7 +1,13 @@
 import prisma from "@/config/database";
-import { EnrichedFilter, PetData } from "@/types/petTypes";
+import {
+  EnrichedFilter,
+  BreedPayloadData,
+  PetData,
+  BreedFilter,
+  PetTypePayloadData,
+} from "@/types/petTypes";
 
-const create = async (pet: PetData, userId: number) => {
+const create = async (pet: PetData, userId: string) => {
   return await prisma.pet.create({
     data: {
       ...pet,
@@ -11,25 +17,21 @@ const create = async (pet: PetData, userId: number) => {
   });
 };
 
-const findAll = async (filter: EnrichedFilter, userId: number) => {
-  const filterConfig = {
-    ...(filter.type && { type: filter.type }),
-    ...(filter.vaccinated && { vaccinated: Boolean(filter.vaccinated) }),
-    ...(filter.location && {
-      ownerUser: { address: { state: { equals: filter.location } } },
-    }),
-
-    interestedPets: {
-      every: { userId: { not: userId } },
-    },
-
-    notInterestedPets: {
-      every: { userId: { not: userId } },
-    },
-  };
+const findAll = async (filter: EnrichedFilter, userId: string) => {
+  const filterConfig = buildFindPetFilter(filter, userId);
 
   return prisma.pet.findMany({
-    where: filterConfig,
+    where: {
+      ...filterConfig,
+
+      interestedPets: {
+        every: { userId: { not: userId } },
+      },
+
+      notInterestedPets: {
+        every: { userId: { not: userId } },
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -90,35 +92,38 @@ const getById = (petId: number) => {
   });
 };
 
-const addNotInterestedPet = async (petId: number, userId: number) =>
-  prisma.notInterestedPet.create({ data: { petId, userId } });
+const addNotInterestedPet = async (petId: number, userId: string) => {
+  return prisma.notInterestedPet.create({ data: { petId, userId } });
+};
 
-const addInterestedPet = async (petId: number, userId: number) =>
-  prisma.interestedPet.create({ data: { petId, userId } });
+const addInterestedPet = async (petId: number, userId: string) => {
+  return prisma.interestedPet.create({ data: { petId, userId } });
+};
 
-const getNotInterestedPetByUserId = async (petId: number, userId: number) => {
+const getNotInterestedPetByUserId = async (petId: number, userId: string) => {
   return prisma.notInterestedPet.findFirst({ where: { petId, userId } });
 };
 
-const getInterestedPetByUserId = async (petId: number, userId: number) => {
+const getInterestedPetByUserId = async (petId: number, userId: string) => {
   return prisma.interestedPet.findFirst({ where: { petId, userId } });
 };
 
-const getAllInterestedPets = async (filter: EnrichedFilter, userId: number) => {
+const buildFindPetFilter = (filter: EnrichedFilter, userId = null) => {
+  return {
+    ...(filter.vaccinated && { vaccinated: Boolean(filter.vaccinated) }),
+    ...(filter.location && {
+      ownerUser: { address: { state: { equals: filter.location } } },
+    }),
+    type: { name: { equals: filter.type } },
+  };
+};
+
+const getAllInterestedPets = async (filter: EnrichedFilter, userId: string) => {
+  const filterConfig = buildFindPetFilter(filter, userId);
   return prisma.interestedPet.findMany({
     where: {
       userId,
-      pet: {
-        ...(filter.type && { type: filter.type }),
-        ...(filter.location && {
-          ownerUser: {
-            address: {
-              state: { equals: filter.location },
-            },
-          },
-        }),
-        ...(filter.vaccinated && { vaccinated: filter.vaccinated }),
-      },
+      pet: filterConfig,
     },
     select: {
       pet: {
@@ -150,6 +155,64 @@ const getAllInterestedPets = async (filter: EnrichedFilter, userId: number) => {
   });
 };
 
+const createBreed = async (petBreed: BreedPayloadData) => {
+  return await prisma.breed.create({
+    data: {
+      name: petBreed.name,
+      type: {
+        connect: {
+          name: petBreed.name,
+        },
+      },
+    },
+  });
+};
+
+const getAllBreeds = async (filter: BreedFilter = null) => {
+  const filterConfig = {
+    ...(filter && { type: { name: filter.type.name } }),
+    ...(filter && { type: { name: filter.type.name } }),
+  };
+  return await prisma.breed.findMany({
+    where: filterConfig,
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+};
+
+const findBreedByName = async (name: string) => {
+  return await prisma.breed.findUnique({
+    where: {
+      name,
+    },
+  });
+};
+
+const createPetType = async (petType: PetTypePayloadData) => {
+  return await prisma.petType.create({
+    data: petType,
+  });
+};
+
+const getAllPetTypes = async () => {
+  return prisma.petType.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+};
+
+const findPetTypeByName = async (name: string) => {
+  return await prisma.petType.findUnique({
+    where: {
+      name,
+    },
+  });
+};
+
 export default {
   create,
   findAll,
@@ -159,4 +222,10 @@ export default {
   getNotInterestedPetByUserId,
   getInterestedPetByUserId,
   getAllInterestedPets,
+  createBreed,
+  getAllBreeds,
+  findBreedByName,
+  createPetType,
+  getAllPetTypes,
+  findPetTypeByName,
 };
