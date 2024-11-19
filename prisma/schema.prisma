@@ -25,6 +25,11 @@ model User {
   notInterestedPets NotInterestedPet[]
   interestedPets    InterestedPet[]
 
+  chatRoomOwner     ChatRoom[] @relation("ChatRoomOwner")
+  chatRoominitiator ChatRoom[] @relation("ChatRoominitiator")
+
+  chatRoomMessageFrom ChatRoomMessage[] @relation("FromUser")
+
   @@map("users")
 }
 
@@ -133,4 +138,31 @@ model PetType {
   Breed     Breed[]
 
   @@map("pet_types")
+}
+
+model ChatRoom {
+  id              String            @id @default(cuid())
+  name            String
+  createdAt       DateTime          @default(now())
+  ownerId         String
+  owner           User              @relation("ChatRoomOwner", fields: [ownerId], references: [id])
+  initiatorId     String
+  initiator       User              @relation("ChatRoominitiator", fields: [initiatorId], references: [id])
+  chatRoomMessage ChatRoomMessage[]
+
+  @@map("chat_rooms")
+}
+
+model ChatRoomMessage {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+
+  fromUserId String
+  fromUser   User   @relation("FromUser", fields: [fromUserId], references: [id])
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+
+  @@map("chat_room_messages")
 }

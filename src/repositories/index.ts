@@ -3,6 +3,7 @@ import petsRepository from "./petsRepository";
 import userRepository from "./userRepository";
 import picturesRepository from "./picturesRepository";
 import petPicturesRepository from "./petPicturesRepository";
+import chatRepository from "./chatRepository";
 
 export {
   addressRepository,
@@ -10,4 +11,5 @@ export {
   userRepository,
   picturesRepository,
   petPicturesRepository,
+  chatRepository,
 };

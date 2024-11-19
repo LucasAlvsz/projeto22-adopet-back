@@ -1,5 +1,7 @@
 import joi from "joi"
 
+export const tokenSchema = joi.string().pattern(/^[\w-]*\.[\w-]*\.[\w-]*$/).required()
+
 const authHeaderSchema = joi
 	.object({
 		authorization: joi
