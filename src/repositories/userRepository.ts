@@ -1,10 +1,10 @@
-import prisma from "@/db"
-import { SignUpData } from "@/types/userTypes"
+import prisma from "@/config/database";
+import { SignUpData } from "@/types/userTypes";
 
-const create = async (user: SignUpData) => prisma.user.create({ data: user })
+const create = async (user: SignUpData) => prisma.user.create({ data: user });
 
 const getByEmail = async (email: string) => {
-	return prisma.user.findUnique({ where: { email } })
-}
+  return prisma.user.findUnique({ where: { email } });
+};
 
-export default { create, getByEmail }
+export default { create, getByEmail };

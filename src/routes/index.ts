@@ -1,15 +1,15 @@
-import { Router } from "express"
-import "express-async-errors"
+import { Router } from "express";
+import { handleError } from "@/middlewares";
+import authRouter from "./authRouter";
+import petsRouter from "./petsRouter";
+import healthRouter from "./healthRouter";
+import chatRouter from "./chatRouter";
 
-import authRouter from "./authRouter"
-import petsRouter from "./petsRouter"
-import { handleError } from "@/middlewares"
-
-const router = Router()
+const router = Router();
 router
-	.get("/health", (_, res) => res.send("OK"))
-	.use(authRouter)
-	.use("/pets", petsRouter)
-	.use(handleError)
-
-export default router
+  .use("/health", healthRouter)
+  .use(authRouter)
+  .use("/pets", petsRouter)
+  .use(chatRouter)
+  .use(handleError);
+export default router;

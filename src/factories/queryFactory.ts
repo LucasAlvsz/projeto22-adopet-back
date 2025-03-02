@@ -1,10 +1,16 @@
-import prisma from "@/db"
-import { Prisma } from "@prisma/client"
+import prisma from "@/config/database";
+import { Prisma } from "@prisma/client";
 
-const getById = async (id: number, model: Prisma.ModelName) => {
-	return await prisma[model].findUnique({
-		where: { id },
-	})
-}
+const getById = async (id: string | number, model: Prisma.ModelName) => {
+  return await prisma[model].findUnique({
+    where: { id },
+  });
+};
 
-export default { getById }
+const getByUnique = async (unique: string, model: Prisma.ModelName) => {
+  return await prisma[model].findUnique({
+    where: { unique },
+  });
+};
+
+export default { getById, getByUnique };

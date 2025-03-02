@@ -1,0 +1,60 @@
+@PORT = 3000
+@HOST_URL = http://localhost:{{PORT}}
+@contentType = application/json
+
+# @name health
+GET {{HOST_URL}}/health
+
+###
+
+# @name sign-up
+POST {{HOST_URL}}/sign-up
+Content-Type: application/json
+
+{
+    "name": "Lucas",
+    "email": "lucax@gmail.com",
+    "password": "lucaxlucax",
+    "phone": "(61) 98888-8888",
+    "cep": "72546-378"
+}
+
+###
+
+# @name login
+POST {{HOST_URL}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "lucax@gmail.com",
+    "password": "lucaxlucax"
+}
+
+###
+@token = {{ login.response.body.token }}
+
+# @name get-pets
+GET {{HOST_URL}}/pets
+    ?type=dog
+    &location=true
+    &vaccinated=true
+authorization: Bearer {{ token }}
+
+###
+
+# @name get breeds
+GET {{HOST_URL}}/breeds
+authorization: Bearer {{ token }}
+
+###
+
+# @name create-breed
+POST {{HOST_URL}}/breeds
+Content-Type: application/json
+
+{
+    "name": "Pug",
+    "type": "dog"
+}
+
+###

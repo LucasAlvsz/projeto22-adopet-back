@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
   password  String
@@ -19,80 +19,98 @@ model User {
   phone     String
   createdAt DateTime @default(now())
 
-  addressId         Int
+  addressId         String
   address           Address            @relation(fields: [addressId], references: [id])
-  NotInterestedPets NotInterestedPet[]
-  Pet               Pet[]
-  InterestedPet     InterestedPet[]
+  pet               Pet[]
+  notInterestedPets NotInterestedPet[]
+  interestedPets    InterestedPet[]
+
+  chatRoomOwner     ChatRoom[] @relation("ChatRoomPetOwner")
+  chatRoomInitiator ChatRoom[] @relation("ChatRoomInitiator")
+
+  messageFrom Message[] @relation("FromUser")
 
   @@map("users")
 }
 
 model Address {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(cuid())
   cep      String
   street   String
   state    String
   city     String
   district String
-  User     User[]
+  user     User[]
+
+  @@map("addresses")
 }
 
 model NotInterestedPet {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
   petId  Int
-  pet    Pet  @relation(fields: [petId], references: [id])
+  pet    Pet    @relation(fields: [petId], references: [id])
 
-  @@map("not_interested_pet")
+  @@map("not_interested_pets")
 }
 
 model InterestedPet {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
   petId  Int
-  pet    Pet  @relation(fields: [petId], references: [id])
+  pet    Pet    @relation(fields: [petId], references: [id])
 
-  @@map("interested_pet")
+  @@map("interested_pets")
 }
 
 model Pet {
   id         Int     @id @default(autoincrement())
   name       String
-  type       PetType
   age        Int
   weight     Float
-  sex        String
+  sex        PetSex
   vaccinated Boolean
   about      String
 
-  ownerId   Int
-  ownerUser User @relation(fields: [ownerId], references: [id])
+  petTypeId Int
+  type      PetType @relation(fields: [petTypeId], references: [id])
+
+  ownerId   String
+  ownerUser User   @relation(fields: [ownerId], references: [id])
 
   breedId Int
   breed   Breed @relation(fields: [breedId], references: [id])
 
   createdAt         DateTime           @default(now())
-  petPictures       petPictures[]
+  petPictures       PetPictures[]
   notInterestedPets NotInterestedPet[]
-  InterestedPet     InterestedPet[]
+  interestedPets    InterestedPet[]
 
   @@map("pets")
 }
 
+enum PetSex {
+  Male
+  Female
+
+  @@map("pet_sex")
+}
+
 model Breed {
   id        Int      @id @default(autoincrement())
-  name      String
-  type      PetType
+  name      String   @unique
   createdAt DateTime @default(now())
   pets      Pet[]
+
+  petTypeId Int
+  type      PetType @relation(fields: [petTypeId], references: [id])
 
   @@map("breeds")
 }
 
-model petPictures {
+model PetPictures {
   id        Int      @id @default(autoincrement())
   petId     Int
   pet       Pet      @relation(fields: [petId], references: [id])
@@ -107,12 +125,43 @@ model Picture {
   id          Int           @id @default(autoincrement())
   url         String
   createdAt   DateTime      @default(now())
-  petPictures petPictures[]
+  petPictures PetPictures[]
 
   @@map("pictures")
 }
 
-enum PetType {
-  dog
-  cat
+model PetType {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  pets      Pet[]
+  Breed     Breed[]
+
+  @@map("pet_types")
+}
+
+model ChatRoom {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  ownerId     String
+  petOwner    User      @relation("ChatRoomPetOwner", fields: [ownerId], references: [id])
+  initiatorId String
+  initiator   User      @relation("ChatRoomInitiator", fields: [initiatorId], references: [id])
+  message     Message[]
+
+  @@map("chat_rooms")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+
+  fromUserId String
+  fromUser   User   @relation("FromUser", fields: [fromUserId], references: [id])
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+
+  @@map("messages")
 }
