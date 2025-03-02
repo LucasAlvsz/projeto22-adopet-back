@@ -13,12 +13,10 @@ app.use(router);
 
 const server = createServer(app);
 export const io = new Server(server, {
-    cors: {
-        origin: "*",
-    },
+  cors: {
+    origin: "*",
+  },
 });
 app.use(handleError);
 
 export default server;
-
-

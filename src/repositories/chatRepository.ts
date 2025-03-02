@@ -1,42 +1,71 @@
 import prisma from "@/config/database";
-// import { ChatRoom } from "@prisma/client";
-import { ChatRoomMessagePayload, ChatRoomPayload } from "@/types/chatTypes";
+import { MessagePayload, ChatRoomData } from "@/types/chatTypes";
 
-const createNewChatRoom = async (chatRoomData: ChatRoomPayload) => {
-    return await prisma.chatRoom.create({ data: { ...chatRoomData } });
+const createNewChatRoom = async (chatRoomData: ChatRoomData) => {
+  return await prisma.chatRoom.create({ data: { ...chatRoomData } });
+};
+const getChatRoomByUsersId = async (ownerId: string, initiatorId: string) => {
+  return await prisma.chatRoom.findFirst({
+    where: {
+      ownerId,
+      initiatorId,
+    },
+  });
+};
+
+const getChatRoomById = async (chatRoomId: string) => {
+  return await prisma.chatRoom.findFirst({
+    where: {
+      id: chatRoomId,
+    },
+  });
 };
 
 const getAllUserChatRooms = async (userId: string) => {
-    return await prisma.chatRoom.findMany({
-        where: {
-            OR: [
-                {
-                    ownerId: userId,
-                },
-                {
-                    initiatorId: userId,
-                },
-            ],
+  return await prisma.chatRoom.findMany({
+    where: {
+      OR: [
+        {
+          ownerId: userId,
         },
-    });
+        {
+          initiatorId: userId,
+        },
+      ],
+    },
+  });
 };
 
-const createNewMessages = async (messageData: ChatRoomMessagePayload[], userId: string) => {
-    return await prisma.chatRoomMessage.createMany({
-        data: messageData.map((message) => ({
-            ...message,
-            fromUserId: userId,
-        })),
-    });
+const createNewMessages = async (messageData: MessagePayload[]) => {
+  return await prisma.message.createMany({
+    data: messageData.map((messageData) => ({
+      ...messageData,
+    })),
+  });
 };
 
 const getAllChatRoomMessagesByChatRoomId = async (chatRoomId: string) => {
-    return await prisma.chatRoomMessage.findMany({
-        where: {
-            chatRoomId,
-        },
-    });
+  return await prisma.message.findMany({
+    take: 50,
+    where: {
+      chatRoomId,
+    },
+    select: {
+      text: true,
+      fromUserId: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
 };
 
-
-export default { createNewChatRoom, getAllUserChatRooms, createNewMessages, getAllChatRoomMessagesByChatRoomId };
+export default {
+  createNewChatRoom,
+  getChatRoomByUsersId,
+  getChatRoomById,
+  getAllUserChatRooms,
+  createNewMessages,
+  getAllChatRoomMessagesByChatRoomId,
+};

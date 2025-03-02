@@ -25,10 +25,10 @@ model User {
   notInterestedPets NotInterestedPet[]
   interestedPets    InterestedPet[]
 
-  chatRoomOwner     ChatRoom[] @relation("ChatRoomOwner")
-  chatRoominitiator ChatRoom[] @relation("ChatRoominitiator")
+  chatRoomOwner     ChatRoom[] @relation("ChatRoomPetOwner")
+  chatRoomInitiator ChatRoom[] @relation("ChatRoomInitiator")
 
-  chatRoomMessageFrom ChatRoomMessage[] @relation("FromUser")
+  messageFrom Message[] @relation("FromUser")
 
   @@map("users")
 }
@@ -141,19 +141,18 @@ model PetType {
 }
 
 model ChatRoom {
-  id              String            @id @default(cuid())
-  name            String
-  createdAt       DateTime          @default(now())
-  ownerId         String
-  owner           User              @relation("ChatRoomOwner", fields: [ownerId], references: [id])
-  initiatorId     String
-  initiator       User              @relation("ChatRoominitiator", fields: [initiatorId], references: [id])
-  chatRoomMessage ChatRoomMessage[]
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  ownerId     String
+  petOwner    User      @relation("ChatRoomPetOwner", fields: [ownerId], references: [id])
+  initiatorId String
+  initiator   User      @relation("ChatRoomInitiator", fields: [initiatorId], references: [id])
+  message     Message[]
 
   @@map("chat_rooms")
 }
 
-model ChatRoomMessage {
+model Message {
   id        String   @id @default(cuid())
   text      String
   createdAt DateTime @default(now())
@@ -164,5 +163,5 @@ model ChatRoomMessage {
   chatRoomId String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
 
-  @@map("chat_room_messages")
+  @@map("messages")
 }

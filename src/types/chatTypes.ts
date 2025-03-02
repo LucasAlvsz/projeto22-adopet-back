@@ -1,10 +1,9 @@
-import { ChatRoom, ChatRoomMessage } from "@prisma/client";
+import { ChatRoom, Message } from "@prisma/client";
 
-type ChatRoomPayload = Omit<ChatRoom, "id" | "createdAt">;
+type ChatRoomPayload = Omit<ChatRoom, "id" | "createdAt" | "initiatorId">;
 
-type ChatRoomMessagePayload = Omit<ChatRoomMessage, "id" | "createdAt">;
+type ChatRoomData = Omit<ChatRoom, "id" | "createdAt">;
 
-export {
-    ChatRoomPayload,
-    ChatRoomMessagePayload,
-}
+type MessagePayload = Omit<Message, "id" | "createdAt">;
+
+export { ChatRoomPayload, ChatRoomData, MessagePayload };

@@ -1,7 +1,7 @@
-import { ChatRoomMessagePayload } from "@/types/chatTypes";
+import { MessagePayload } from "@/types/chatTypes";
 import Joi from "joi";
 
-const messageSchema = Joi.object<ChatRoomMessagePayload>({
+const messageSchema = Joi.object<MessagePayload>({
     chatRoomId: Joi.string().required(),
     text: Joi.string().required(),
 });

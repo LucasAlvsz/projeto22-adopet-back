@@ -74,6 +74,7 @@ const getById = (petId: number) => {
       breed: { select: { name: true } },
       ownerUser: {
         select: {
+          id: true,
           name: true,
           picUrl: true,
           phone: true,
